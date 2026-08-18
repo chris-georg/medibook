@@ -1,0 +1,145 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<!-- HEADER -->
+<div class="mb-6">
+    <h2 class="text-2xl md:text-3xl font-bold text-slate-800">
+        Admin Dashboard
+    </h2>
+    <p class="text-sm text-slate-500 mt-1">
+        Manage all patient appointments and update their status in real-time.
+    </p>
+</div>
+
+{% if appointments %}
+
+<!-- TABLE CARD -->
+<div class="bg-white border border-slate-100 shadow-sm rounded-2xl overflow-hidden">
+
+    <div class="overflow-x-auto">
+
+        <table class="min-w-full text-sm">
+
+            <!-- HEAD -->
+            <thead class="bg-slate-50 text-slate-600 uppercase text-xs tracking-wide">
+                <tr>
+                    <th class="px-4 py-3 text-left">Patient</th>
+                    <th class="px-4 py-3 text-left">Doctor</th>
+                    <th class="px-4 py-3 text-left">Date</th>
+                    <th class="px-4 py-3 text-left">Time</th>
+                    <th class="px-4 py-3 text-left">Reason</th>
+                    <th class="px-4 py-3 text-left">Status</th>
+                    <th class="px-4 py-3 text-left">Update</th>
+                </tr>
+            </thead>
+
+            <!-- BODY -->
+            <tbody class="divide-y divide-slate-100">
+
+                {% for appt in appointments %}
+
+                <tr class="hover:bg-slate-50 transition">
+
+                    <td class="px-4 py-3 font-medium text-slate-700">
+                        {{ appt.patient.get_full_name }}
+                    </td>
+
+                    <td class="px-4 py-3 text-slate-600">
+                        Dr. {{ appt.doctor.name }}
+                    </td>
+
+                    <td class="px-4 py-3 text-slate-600">
+                        {{ appt.date }}
+                    </td>
+
+                    <td class="px-4 py-3 text-slate-600">
+                        {{ appt.time }}
+                    </td>
+
+                    <td class="px-4 py-3 text-slate-600 max-w-xs truncate">
+                        {{ appt.reason }}
+                    </td>
+
+                    <!-- STATUS -->
+                    <td class="px-4 py-3">
+
+                        <span class="text-xs font-semibold px-3 py-1 rounded-full
+                            {% if appt.status == 'Confirmed' %}
+                                bg-green-100 text-green-700
+                            {% elif appt.status == 'Cancelled' %}
+                                bg-red-100 text-red-700
+                            {% else %}
+                                bg-yellow-100 text-yellow-700
+                            {% endif %}
+                        ">
+                            {{ appt.status }}
+                        </span>
+
+                    </td>
+
+                    <!-- UPDATE FORM -->
+                    <td class="px-4 py-3">
+
+                        <form method="POST" action="{% url 'update_status' appt.pk %}"
+                              class="flex items-center gap-2">
+
+                            {% csrf_token %}
+
+                            <select name="status"
+                                class="text-sm border border-slate-200 rounded-lg px-2 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500">
+
+                                <option value="Pending" {% if appt.status == 'Pending' %}selected{% endif %}>
+                                    Pending
+                                </option>
+
+                                <option value="Confirmed" {% if appt.status == 'Confirmed' %}selected{% endif %}>
+                                    Confirmed
+                                </option>
+
+                                <option value="Cancelled" {% if appt.status == 'Cancelled' %}selected{% endif %}>
+                                    Cancelled
+                                </option>
+
+                            </select>
+
+                            <button type="submit"
+                                class="px-3 py-1.5 text-sm bg-primary text-white rounded-lg hover:opacity-90 transition">
+                                Update
+                            </button>
+
+                        </form>
+
+                    </td>
+
+                </tr>
+
+                {% endfor %}
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+{% else %}
+
+<!-- EMPTY STATE -->
+<div class="text-center py-16 bg-white border border-slate-100 rounded-2xl shadow-sm">
+
+    <div class="text-5xl mb-3">📋</div>
+
+    <h3 class="text-xl font-bold text-slate-800">
+        No Appointments Found
+    </h3>
+
+    <p class="text-slate-500 mt-2">
+        Once patients book appointments, they will appear here.
+    </p>
+
+</div>
+
+{% endif %}
+
+{% endblock %}

@@ -1,0 +1,116 @@
+{% extends 'base.html' %} {% block content %}
+
+<!-- HEADER -->
+<div
+  class="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-8"
+>
+  <div>
+    <h2 class="text-2xl md:text-3xl font-bold text-slate-800">
+      Welcome, {{ user.first_name }} 👋
+    </h2>
+    <p class="text-slate-500 text-sm mt-1">
+      Manage your appointments and stay updated with your healthcare schedule.
+    </p>
+  </div>
+
+  {% if not user.is_staff %}
+  <a href="{% url 'book_appointment' %}" class="inline-flex items-center justify-center px-5 py-3 rounded-xl bg-primary text-white font-semibold shadow-md hover:opacity-90 transition"
+    >+ Book Appointment</a
+  >
+  {% endif %}
+
+</div>
+
+<!-- APPOINTMENTS -->
+{% if appointments %}
+
+<div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+  {% for appt in appointments %}
+
+  <div
+    class="bg-white border border-slate-100 rounded-2xl shadow-sm hover:shadow-md transition p-6"
+  >
+    <!-- Doctor -->
+    <h3 class="text-lg font-bold text-primary">Dr. {{ appt.doctor.name }}</h3>
+
+    <p class="text-sm text-slate-500 mt-1">{{ appt.doctor.specialization }}</p>
+
+    <div class="mt-4 space-y-2 text-sm text-slate-700">
+      <p><span class="font-semibold">Date:</span> {{ appt.date }}</p>
+      <p><span class="font-semibold">Time:</span> {{ appt.time }}</p>
+      <p><span class="font-semibold">Reason:</span> {{ appt.reason }}</p>
+    </div>
+
+    <!-- STATUS -->
+    <div class="mt-4 flex items-center justify-between">
+      <span
+        class="text-xs font-semibold px-3 py-1 rounded-full {% if appt.status == 'Confirmed' %} bg-green-100 text-green-700 {% elif appt.status == 'Cancelled' %} bg-red-100 text-red-700 {% else %} bg-yellow-100 text-yellow-700 {% endif %}"
+      >
+        {{ appt.status }}
+      </span>
+
+      {% if appt.status == 'Pending' %}
+      <a
+        href="{% url 'cancel_appointment' appt.pk %}"
+        onclick="return confirm('Cancel this appointment?');"
+        class="text-sm text-red-500 hover:text-red-700 font-medium"
+      >
+        Cancel
+      </a>
+      {% endif %}
+    </div>
+  </div>
+
+  {% endfor %}
+</div>
+
+{% else %}
+
+<!-- EMPTY STATE -->
+{% if user.is_staff %}
+
+<!-- ADMIN EMPTY STATE -->
+<div class="text-center py-16 bg-white border border-slate-100 rounded-2xl shadow-sm">
+
+    <div class="text-5xl mb-4">📋</div>
+
+    <h3 class="text-xl font-bold text-slate-800">
+        No Appointments Found
+    </h3>
+
+    <p class="text-slate-500 mt-2">
+        There are currently no scheduled appointments in the system.
+    </p>
+
+    <a href="{% url 'admin_dashboard' %}"
+       class="inline-block mt-6 px-6 py-3 bg-primary text-white rounded-xl font-semibold hover:opacity-90 transition">
+        Go to Admin Dashboard
+    </a>
+
+</div>
+
+{% else %}
+
+<!-- PATIENT EMPTY STATE -->
+<div class="text-center py-16 bg-white border border-slate-100 rounded-2xl shadow-sm">
+
+    <div class="text-5xl mb-4">🏥</div>
+
+    <h3 class="text-xl font-bold text-slate-800">
+        No Appointments Yet
+    </h3>
+
+    <p class="text-slate-500 mt-2">
+        You haven’t booked any appointments. Start by scheduling your first one.
+    </p>
+
+    <a href="{% url 'book_appointment' %}"
+       class="inline-block mt-6 px-6 py-3 bg-primary text-white rounded-xl font-semibold hover:opacity-90 transition">
+        Book Your First Appointment
+    </a>
+
+</div>
+
+{% endif %}
+
+{% endif %} {% endblock %}

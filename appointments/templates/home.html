@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="flex items-center justify-center py-16">
+
+    <div class="text-center max-w-2xl">
+
+        <!-- Badge -->
+        <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-50 text-primary text-sm font-medium mb-6 shadow-sm">
+            🏥 Smart Healthcare Booking System
+        </div>
+
+        <!-- Heading -->
+        <h1 class="text-4xl md:text-5xl font-bold text-slate-800 leading-tight">
+            Welcome to <span class="text-primary">MediBook</span>
+        </h1>
+
+        <!-- Subtext -->
+        <p class="mt-4 text-lg text-slate-500">
+            Book doctor appointments quickly, securely, and without stress.  
+            Manage your healthcare in one simple platform.
+        </p>
+
+        <!-- Buttons -->
+        <div class="mt-8 flex flex-col sm:flex-row items-center justify-center gap-4">
+
+            <a href="{% url 'register' %}"
+               class="px-6 py-3 rounded-xl bg-primary text-white font-semibold shadow-md hover:opacity-90 transition w-full sm:w-auto">
+                Get Started
+            </a>
+
+            <a href="{% url 'login' %}"
+               class="px-6 py-3 rounded-xl border border-slate-300 text-slate-700 font-semibold hover:bg-slate-100 transition w-full sm:w-auto">
+                Login
+            </a>
+
+        </div>
+
+        <!-- Extra subtle info -->
+        <p class="mt-6 text-sm text-slate-400">
+            Trusted by patients for faster appointment scheduling ⚡
+        </p>
+
+    </div>
+
+</div>
+
+{% endblock %}
