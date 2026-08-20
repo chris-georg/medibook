@@ -2,13 +2,15 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import login, logout, authenticate
 from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from .forms import RegisterForm, AppointmentForm
 from .models import Appointment, Doctor
 from datetime import datetime, date, timedelta
 import datetime as dt
 
-
+def health(request):
+    return HttpResponse("OK", status=200)
+    
 # --- Helper: Generate all 15-min slots within working hours ---
 def generate_time_slots():
     slots = []
