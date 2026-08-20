@@ -12,4 +12,5 @@ urlpatterns = [
     path('admin-dashboard/', views.admin_dashboard, name='admin_dashboard'),
     path('update-status/<int:pk>/', views.update_status, name='update_status'),
     path('get-slots/', views.get_slots, name='get_slots'),
+    path('health/', views.health, name='health'),
 ]
